@@ -2,6 +2,8 @@
 // Buttons                      //
 //////////////////////////////////
 
+
+//Copies the most recent turn and puts it below
 function addTurn() {
     $(".turn").last().clone().insertAfter($(".turn").last());
     $(".turn-num-name").last().text("Turn " + $(".turn-num-name").length);
@@ -14,18 +16,22 @@ function addTurn() {
     setTurnValues(turnString, turns);
 }
 
+//Delete the most recent turn
 function delTurn() {
     if ($(".turn").length > 1) $(".turn").last().remove();
 }
 
+//toggles display of the main turn options
 function toggleOptions(btn) {
     btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
 }
 
+//Toggle display of turns timing menu
 function toggleAdvanced(btn) {
     btn.parents(".turn-options").children(".advanced-options").toggleClass("hidden");
 }
 
+//Toggle display of the turns data menu
 function toggleData(btn) {
     btn.parents(".turn-options").children(".data-options").toggleClass("hidden");
 }
@@ -45,6 +51,7 @@ function repeatToggle(btn) {
 
 }
 
+//Toggles display of the dualcast ability selects
 function toggleDualCast(btn) {
     if (btn.is(':checked')) {
         if (btn.parents(".unit-action").children(".dualcast-select").hasClass('hidden')) {
@@ -57,21 +64,27 @@ function toggleDualCast(btn) {
     }
 }
 
+//Moves the clicked unit order up by one.
 function unitOrderUp(btn) {
     var form = btn.parents(".delay-unit-form");
     form.prev().insertAfter(form);
 }
 
+//Moves the clicked unit order down by one.
 function unitOrderDown(btn) {
     var form = btn.parents(".delay-unit-form");
     form.next().insertBefore(form);
 }
 
+//Calls the main macro building function and outputs the result to the output box
 function generate() {
     var macro = buildMacro();
-    $("#output").text(macro);
+    console.log(macro);
+    $("#output").val("");
+    $("#output").val(macro);
 }
 
+//Toggles display of the manual companion select delay entry
 function toggleManualComp() {
     if ($('.manual-box').is(':checked') && $(".manual-time-form").hasClass("hidden")) {
         $(".manual-time-form").toggleClass("hidden");
@@ -81,11 +94,13 @@ function toggleManualComp() {
     }
 }
 
+//Copies contents of the output box to clipboard
 function copy() {
     $("#output").select();
     document.execCommand('copy');
 }
 
+//Copies the contents of the turn export box to clipboard
 function copyTurn(btn) {
     btn.parents(".data-options").find(".import-export").select();
     document.execCommand('copy');
@@ -95,6 +110,7 @@ function copyTurn(btn) {
 // String Generators            //
 //////////////////////////////////
 
+//Global Variables, don't hate
 var time = 0;
 var vinput = "--VINPUT--MULTI:1:";
 var clickWait = 10000;
@@ -112,6 +128,7 @@ var unitLoc = ['--VINPUT--MULTI:1:0:860:535\r\n',
 var unitColLoc = ["535", "30", "535", "30", "535", "30"];
 var unitRowLoc = ["860", "860", "980", "980", "1100", "1100"];
 
+//Calls main macro building functions, returns complete macro
 function buildMacro() {
     var macro = "";
     time = 100000;
@@ -128,6 +145,7 @@ function buildMacro() {
     return macro;
 }
 
+//Builds and returns string for selecting mission
 function getMissionString() {
     var macro = "";
     var mission;
@@ -160,6 +178,7 @@ function getMissionString() {
     return macro;
 }
 
+//Builds and returns string to click the next button after mission select
 function getStartNextString() {
     var macro = "";
 
@@ -172,6 +191,7 @@ function getStartNextString() {
     return macro;
 }
 
+//Builds and returns the string for companion select based on options
 function getCompanionString() {
     var macro = "";
     var customDelay;
@@ -209,6 +229,7 @@ function getCompanionString() {
     return macro;
 }
 
+//builds and returns string to click depart button
 function getDepartString() {
     var macro = "";
 
@@ -221,7 +242,7 @@ function getDepartString() {
 }
 
 
-//Get action setups and then execute in delay order
+//Build and return main turn macro string
 function getTurnsString() {
     var macro = "";
     var turns;
@@ -246,7 +267,6 @@ function getTurnsString() {
         repeat = $(".turn-" + (i + 1)).find("input[name='repeat']:checked").val();
 
         //For each unit
-
         for (var j = 1; j < 7; j++) {
 
             if (repeat === "repeat") {
@@ -277,6 +297,7 @@ function getTurnsString() {
             delays.push(parseInt($(this).find(".delay-value").val()) * 1000);
         });
 
+        //Build activate string
         for (var y = 0; y < 6; y++) {
             if (repeat === "repeat") break;
             macro += "" + (time += delays[y]) + unitLoc[order[y] - 1];
@@ -294,6 +315,7 @@ function getTurnsString() {
     return macro;
 }
 
+//builds and returns string to progress though mission complete screens
 function getEndSkipString() {
     var macro = "";
 
@@ -351,6 +373,7 @@ function getEndSkipString() {
     return macro;
 }
 
+//Builds and returns string to close daily quest dialog
 function getDailyQuestString() {
     var macro = "";
 
@@ -365,14 +388,17 @@ function getDailyQuestString() {
     return macro;
 }
 
+//Increments and returns the current time
 function getTime() {
     return time += clickWait;
 }
 
+//Adds a specified amount of time to the global variable
 function addTime(amount) {
     time += amount;
 }
 
+//Builds the string for specific actions (ability usage, defed, items)
 function getActionString(unit, action, ability, target, dc, ab1, ab2) {
     var macro = "";
     var pos = [1, 2, 3, 4, 5, 6];
@@ -491,11 +517,46 @@ function getActionString(unit, action, ability, target, dc, ab1, ab2) {
 
             break;
         case 'item':
+
             //Press unit
             macro += getTime() + unitLoc[unit - 1];
-            //scroll right
+            //scroll left
             for (var i = 0; i < 100; i++) {
                 macro += (time += 5000) + vinput + "2:" + unitRowLoc[unit - 1] + ":" + (parseInt(unitColLoc[unit - 1]) + i) + "\r\n";
+            }
+            macro += getTime() + endClick;
+
+            //Scroll to item Position
+            addTime(500000);
+            //Find and click on item
+            while (true) {
+                if (pos.indexOf(ability) === -1) {
+                    if (ability > pos[5]) {
+                        macro += scroll("down");
+                        for (j = 0; j < 6; j++) {
+                            pos[j] += 2;
+                        }
+                    } else if (ability > post[0]) {
+                        macro += scroll("up");
+                        for (j = 0; j < 6; j++) {
+                            pos[j] -= 2;
+                        }
+                    }
+                } else {
+                    //Click item
+                    macro += getTime() + unitLoc[pos.indexOf(ability)];
+                    macro += getTime() + endClick;
+                    addTime(500000);
+                    break;
+                }
+
+            }
+
+            //Click target if set
+            if (target !== 0) {
+                macro += getTime() + unitLoc[target - 1];
+                macro += getTime() + endClick;
+                addTime(500000);
             }
 
             break;
@@ -504,6 +565,7 @@ function getActionString(unit, action, ability, target, dc, ab1, ab2) {
     return macro;
 }
 
+//Scrolls ability/item window in the supplied direction by 1 complete row
 function scroll(dir) {
     var macro = "";
     var i;
@@ -523,6 +585,7 @@ function scroll(dir) {
     return macro;
 }
 
+//generate and returns string to add wait time at end of macro
 function getEndWaitString() {
     var delay = parseInt($(".end-wait-input").val());
     var macro = "";
@@ -536,6 +599,7 @@ function getEndWaitString() {
     return macro;
 }
 
+//Generates and json string with all turn information
 function getTurnObject(turn) {
     var unit;
     var action;
@@ -696,6 +760,7 @@ function getTurnObject(turn) {
     return turnString;
 }
 
+//Sets turns options based on supplied json string
 function setTurnValues(json, turn) {
 
     var turnObj = JSON.parse(json);
@@ -760,7 +825,7 @@ function setTurnValues(json, turn) {
 
     j++;
 
-    $(".turn-" + (turn)).find(".unit-3").find("input[value='" + turnObj.unit5.action + "']").prop('checked', true);
+    $(".turn-" + (turn)).find(".unit-5").find("input[value='" + turnObj.unit5.action + "']").prop('checked', true);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit5.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit5.target);
     if (turnObj.unit5.dc === true) {
@@ -796,6 +861,7 @@ function setTurnValues(json, turn) {
 
 }
 
+//generate and outputs json string for turn
 function exportTurn(btn) {
     var turnString;
     var turn = btn.parents(".turn").data("turn");
@@ -805,6 +871,7 @@ function exportTurn(btn) {
     btn.parents(".data-options").find(".import-export").val(turnString);
 }
 
+//Sets turn options based upon import json string
 function importTurn(btn) {
     var turnString;
     var turn = btn.parents(".turn").data("turn");
