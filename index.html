@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/macro.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>FFBE MEMU Macro Generator v0.1</h1>
+        <h6 class="credits">Created by Felfe</h6>
+        <div class="row">
+
+        </div>
+        <div class="row">
+                        <div class="col card">
+                <div class="card-block">
+                    <h2>Mission</h2>
+                    <select name="mission" id="mission-num" data-toggle="tooltip" data-placement="top" title="Will depart on mission selected, 1 being the top of the list and so on.">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col card">
+                <div class="card-block">
+                    <h2>Companion</h2>
+                    <form class="companion-form">
+                        <input class="companion-box" type="radio" name="companion" value="true" checked="checked" data-toggle="tooltip" data-placement="top" title="Will select 3rd companion on list.">Yes
+                        <input class="companion-box" type="radio" name="companion" value="false" data-toggle="tooltip" data-placement="top" title="Will depart without companion.">No
+                        <input class="companion-box manual-box" type="radio" name="companion" value="manual" data-toggle="tooltip" data-placement="top" title="Will provide a delay of specified length to allow manual selection of companion unit."> Manual
+                        <br>
+                        <span class="hidden manual-time-form">Delay Time (Seconds): <input class="manual-time-value" type="number" name="manual-time" value="5"></span>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="turns-container">
+            <div class="row turn turn-1" data-turn="1">
+                <div class="col card">
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col">
+                                <h2 class="turn-num-name">Turn 1</h2>
+                            </div>
+                            <div class="col right-align">
+                                Repeat: <input class="repeat-box" type="checkbox" name="repeat" value="repeat">
+                                <button type="button" class="btn btn-info toggle-turn-options-btn">-</button>
+                            </div>
+                        </div>
+                        <div class="turn-options">
+                            <div class="row">
+                                <div class="col-6 card unit-1">
+                                    <div class="card-block">
+                                        <h5>Unit 1</h5>
+                                        <form class="unit-action unit-1-action">
+                                            <input type="radio" name="unit-1-action" value="attack" checked="checked" data-toggle="tooltip" data-placement="top" title="Will perform basic attack with this unit."> Attack
+                                            <input type="radio" name="unit-1-action" value="defend" data-toggle="tooltip" data-placement="top" title="Will perform defend action."> Defend
+                                            <br>
+                                            <input type="radio" name="unit-1-action" value="ability" data-toggle="tooltip" data-placement="top" title="Will perorm ability based on options below."> Ability
+                                            <input type="radio" name="unit-1-action" value="item" data-toggle="tooltip" data-placement="top" title="Will use item based on options below."> Item
+                                            <br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Pos:
+                                                    <select name="ability" class="ability-select" data-toggle="tooltip" data-placement="top" title="Select the ability or item to be used based on its position in your menus. Top left is 1, top right is 2, and so on.">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    Target:
+                                                    <select name="target" class="target-select" data-toggle="tooltip" data-placement="top" title="Select which target the ability will be used on. Select any friendly unit for group target.">
+                                                        <option value="0">Enemy</option>
+                                                        <option value="1">Unit 1</option>
+                                                        <option value="2">Unit 2</option>
+                                                        <option value="3">Unit 3</option>
+                                                        <option value="4">Unit 4</option>
+                                                        <option value="5">Unit 5</option>
+                                                        <option value="6">Unit 6</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    Dual Cast: <input class="dualcast-box" type="checkbox" name="dualcast"
+                                                        value="true"data-toggle="tooltip" data-placement="top" title="Check this if the first ability you are using is a dualcast ability." >
+                                                </div>
+                                            </div>
+                                            <div class="row dualcast-select hidden">
+                                                <div class="col">
+                                                    DC1:
+                                                    <select name="ability" class="dc1-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    DC2:
+                                                    <select name="ability" class="dc2-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-6 card unit-2">
+                                    <div class="card-block">
+                                        <h5>Unit 2</h5>
+                                        <form class="unit-action unit-2-action">
+                                            <input type="radio" name="unit-2-action" value="attack" checked="checked" data-toggle="tooltip" data-placement="top" title="Will perform basic attack with this unit."> Attack
+                                            <input type="radio" name="unit-2-action" value="defend" data-toggle="tooltip" data-placement="top" title="Will perform defend action."> Defend
+                                            <br>
+                                            <input type="radio" name="unit-2-action" value="ability" data-toggle="tooltip" data-placement="top" title="Will perorm ability based on options below."> Ability
+                                            <input type="radio" name="unit-2-action" value="item" data-toggle="tooltip" data-placement="top" title="Will use item based on options below."> Item
+                                            <br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Pos:
+                                                    <select name="ability" class="ability-select" data-toggle="tooltip" data-placement="top" title="Select the ability or item to be used based on its position in your menus. Top left is 1, top right is 2, and so on.">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    Target:
+                                                    <select name="target" class="target-select" data-toggle="tooltip" data-placement="top" title="Select which target the ability will be used on. Select any friendly unit for group target.">
+                                                        <option value="0">Enemy</option>
+                                                        <option value="1">Unit 1</option>
+                                                        <option value="2">Unit 2</option>
+                                                        <option value="3">Unit 3</option>
+                                                        <option value="4">Unit 4</option>
+                                                        <option value="5">Unit 5</option>
+                                                        <option value="6">Unit 6</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    Dual Cast: <input class="dualcast-box" type="checkbox" name="dualcast"
+                                                        value="true"data-toggle="tooltip" data-placement="top" title="Check this if the first ability you are using is a dualcast ability." >
+                                                </div>
+                                            </div>
+                                            <div class="row dualcast-select hidden">
+                                                <div class="col">
+                                                    DC1:
+                                                    <select name="ability" class="dc1-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    DC2:
+                                                    <select name="ability" class="dc2-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 card unit-3">
+                                    <div class="card-block">
+                                        <h5>Unit 3</h5>
+                                        <form class="unit-action unit-3-action">
+                                            <input type="radio" name="unit-3-action" value="attack" checked="checked" data-toggle="tooltip" data-placement="top" title="Will perform basic attack with this unit."> Attack
+                                            <input type="radio" name="unit-3-action" value="defend" data-toggle="tooltip" data-placement="top" title="Will perform defend action."> Defend
+                                            <br>
+                                            <input type="radio" name="unit-3-action" value="ability" data-toggle="tooltip" data-placement="top" title="Will perorm ability based on options below."> Ability
+                                            <input type="radio" name="unit-3-action" value="item" data-toggle="tooltip" data-placement="top" title="Will use item based on options below."> Item
+                                            <br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Pos:
+                                                    <select name="ability" class="ability-select" data-toggle="tooltip" data-placement="top" title="Select the ability or item to be used based on its position in your menus. Top left is 1, top right is 2, and so on.">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    Target:
+                                                    <select name="target" class="target-select" data-toggle="tooltip" data-placement="top" title="Select which target the ability will be used on. Select any friendly unit for group target.">
+                                                        <option value="0">Enemy</option>
+                                                        <option value="1">Unit 1</option>
+                                                        <option value="2">Unit 2</option>
+                                                        <option value="3">Unit 3</option>
+                                                        <option value="4">Unit 4</option>
+                                                        <option value="5">Unit 5</option>
+                                                        <option value="6">Unit 6</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    Dual Cast: <input class="dualcast-box" type="checkbox" name="dualcast"
+                                                        value="true"data-toggle="tooltip" data-placement="top" title="Check this if the first ability you are using is a dualcast ability." >
+                                                </div>
+                                            </div>
+                                            <div class="row dualcast-select hidden">
+                                                <div class="col">
+                                                    DC1:
+                                                    <select name="ability" class="dc1-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    DC2:
+                                                    <select name="ability" class="dc2-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-6 card unit-4">
+                                    <div class="card-block">
+                                        <h5>Unit 4</h5>
+                                        <form class="unit-action unit-4-action">
+                                            <input type="radio" name="unit-4-action" value="attack" checked="checked" data-toggle="tooltip" data-placement="top" title="Will perform basic attack with this unit."> Attack
+                                            <input type="radio" name="unit-4-action" value="defend" data-toggle="tooltip" data-placement="top" title="Will perform defend action."> Defend
+                                            <br>
+                                            <input type="radio" name="unit-4-action" value="ability" data-toggle="tooltip" data-placement="top" title="Will perorm ability based on options below."> Ability
+                                            <input type="radio" name="unit-4-action" value="item" data-toggle="tooltip" data-placement="top" title="Will use item based on options below."> Item
+                                            <br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Pos:
+                                                    <select name="ability" class="ability-select" data-toggle="tooltip" data-placement="top" title="Select the ability or item to be used based on its position in your menus. Top left is 1, top right is 2, and so on.">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    Target:
+                                                    <select name="target" class="target-select" data-toggle="tooltip" data-placement="top" title="Select which target the ability will be used on. Select any friendly unit for group target.">
+                                                        <option value="0">Enemy</option>
+                                                        <option value="1">Unit 1</option>
+                                                        <option value="2">Unit 2</option>
+                                                        <option value="3">Unit 3</option>
+                                                        <option value="4">Unit 4</option>
+                                                        <option value="5">Unit 5</option>
+                                                        <option value="6">Unit 6</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    Dual Cast: <input class="dualcast-box" type="checkbox" name="dualcast"
+                                                        value="true"data-toggle="tooltip" data-placement="top" title="Check this if the first ability you are using is a dualcast ability." >
+                                                </div>
+                                            </div>
+                                            <div class="row dualcast-select hidden">
+                                                <div class="col">
+                                                    DC1:
+                                                    <select name="ability" class="dc1-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    DC2:
+                                                    <select name="ability" class="dc2-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 card unit-5">
+                                    <div class="card-block">
+                                        <h5>Unit 5</h5>
+                                        <form class="unit-action unit-5-action">
+                                            <input type="radio" name="unit-5-action" value="attack" checked="checked" data-toggle="tooltip" data-placement="top" title="Will perform basic attack with this unit."> Attack
+                                            <input type="radio" name="unit-5-action" value="defend" data-toggle="tooltip" data-placement="top" title="Will perform defend action."> Defend
+                                            <br>
+                                            <input type="radio" name="unit-5-action" value="ability" data-toggle="tooltip" data-placement="top" title="Will perorm ability based on options below."> Ability
+                                            <input type="radio" name="unit-5-action" value="item" data-toggle="tooltip" data-placement="top" title="Will use item based on options below."> Item
+                                            <br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Pos:
+                                                    <select name="ability" class="ability-select" data-toggle="tooltip" data-placement="top" title="Select the ability or item to be used based on its position in your menus. Top left is 1, top right is 2, and so on.">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    Target:
+                                                    <select name="target" class="target-select" data-toggle="tooltip" data-placement="top" title="Select which target the ability will be used on. Select any friendly unit for group target.">
+                                                        <option value="0">Enemy</option>
+                                                        <option value="1">Unit 1</option>
+                                                        <option value="2">Unit 2</option>
+                                                        <option value="3">Unit 3</option>
+                                                        <option value="4">Unit 4</option>
+                                                        <option value="5">Unit 5</option>
+                                                        <option value="6">Unit 6</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    Dual Cast: <input class="dualcast-box" type="checkbox" name="dualcast"
+                                                        value="true"data-toggle="tooltip" data-placement="top" title="Check this if the first ability you are using is a dualcast ability." >
+                                                </div>
+                                            </div>
+                                            <div class="row dualcast-select hidden">
+                                                <div class="col">
+                                                    DC1:
+                                                    <select name="ability" class="dc1-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    DC2:
+                                                    <select name="ability" class="dc2-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-6 card unit-6">
+                                    <div class="card-block">
+                                        <h5>Unit 6</h5>
+                                        <form class="unit-action unit-6-action">
+                                            <input type="radio" name="unit-6-action" value="attack" checked="checked" data-toggle="tooltip" data-placement="top" title="Will perform basic attack with this unit."> Attack
+                                            <input type="radio" name="unit-6-action" value="defend" data-toggle="tooltip" data-placement="top" title="Will perform defend action."> Defend
+                                            <br>
+                                            <input type="radio" name="unit-6-action" value="ability" data-toggle="tooltip" data-placement="top" title="Will perorm ability based on options below."> Ability
+                                            <input type="radio" name="unit-6-action" value="item" data-toggle="tooltip" data-placement="top" title="Will use item based on options below."> Item
+                                            <br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Pos:
+                                                    <select name="ability" class="ability-select" data-toggle="tooltip" data-placement="top" title="Select the ability or item to be used based on its position in your menus. Top left is 1, top right is 2, and so on.">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    Target:
+                                                    <select name="target" class="target-select" data-toggle="tooltip" data-placement="top" title="Select which target the ability will be used on. Select any friendly unit for group target.">
+                                                        <option value="0">Enemy</option>
+                                                        <option value="1">Unit 1</option>
+                                                        <option value="2">Unit 2</option>
+                                                        <option value="3">Unit 3</option>
+                                                        <option value="4">Unit 4</option>
+                                                        <option value="5">Unit 5</option>
+                                                        <option value="6">Unit 6</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    Dual Cast: <input class="dualcast-box" type="checkbox" name="dualcast"
+                                                        value="true" data-toggle="tooltip" data-placement="top" title="Check this if the first ability you are using is a dualcast ability." >
+                                                </div>
+                                            </div>
+                                            <div class="row dualcast-select hidden">
+                                                <div class="col">
+                                                    DC1:
+                                                    <select name="ability" class="dc1-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                                <div class="col">
+                                                    DC2:
+                                                    <select name="ability" class="dc2-ability-select" data-toggle="tooltip" data-placement="top" title="Select the position of the dualcast abilities">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>`
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                            </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col right-align">
+                                    <button type="button" class="btn btn-success advanced-btn">Timings</button>
+                                    <button type="button" class="btn btn-success data-btn">Data</button>
+                                </div>
+                            </div>
+                            <div class="advanced-options hidden">
+                                    <h6 data-toggle="tooltip" data-placement="top" title="Units will trigger their abilities in the order below with a delay in milliseconds between each unit activation.">Turn Order and Delay (milliseconds)</h6>
+                                    <span class="unit-order-container">
+                                        <div class="row delay-unit-form" data-unit="1">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Unit 1</span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-up" type="button">Up</button>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-down" type="button">Down</button>
+                                                    </span>
+                                                    <input type="number" class="form-control delay-value delay-unit-1" value="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row delay-unit-form" data-unit="2">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Unit 2</span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-up" type="button">Up</button>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-down" type="button">Down</button>
+                                                    </span>
+                                                    <input type="number" class="form-control delay-value delay-unit-2" value="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row delay-unit-form" data-unit="3">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Unit 3</span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-up" type="button">Up</button>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-down" type="button">Down</button>
+                                                    </span>
+                                                    <input type="number" class="form-control delay-value delay-unit-3" value="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row delay-unit-form" data-unit="4">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Unit 4</span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-up" type="button">Up</button>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-down" type="button">Down</button>
+                                                    </span>
+                                                    <input type="number" class="form-control delay-value delay-unit-4" value="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row delay-unit-form" data-unit="5">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Unit 5</span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-up" type="button">Up</button>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-down" type="button">Down</button>
+                                                    </span>
+                                                    <input type="number" class="form-control delay-value delay-unit-5" value="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row delay-unit-form" data-unit="6">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Unit 6</span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-up" type="button">Up</button>
+                                                    </span>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-secondary delay-down" type="button">Down</button>
+                                                    </span>
+                                                    <input type="number" class="form-control delay-value delay-unit-6" value="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </span>
+                                        <div class="col">
+                                            <label class="col-sm-5 col-form-label" data-toggle="tooltip" data-placement="top" title="The time to wait between the last unit activation and the start of the next turn. The longer this is the safer it will be, increase for longer turns that include skills such as meteor.">Turn Delay (seconds)</label>
+                                            <div class="col-sm-7">
+                                                <input type="number" class="form-control turn-delay" value="12">
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="data-options hidden">
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <button class="btn export-btn btn-success" type="button" data-toggle="tooltip" data-placement="top" title="Generates a string which can be saved and reimported to recreate a turn at a later time.">Export Turn</button>
+                                            </span>
+                                            <span class="input-group-btn">
+                                                <button class="btn import-btn btn-primary" type="button" data-toggle="tooltip" data-placement="top" title="After pasting exported data in the ajoining text area this will recreate the exact options of the exported turn">Import Turn</button>
+                                            </span>
+                                            <input type="text" class="form-control import-export delay-value delay-unit-6" placeholder="Paste turn data here">
+                                            <span class="input-group-btn">
+                                                <button class="btn copy-turn-btn btn-secondary" type="button">Copy</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row hidden">
+                                    <button type="button" class="btn btn-success save-btn">Save Turn</button>
+                                    <button type="button" class="btn btn-success load-btn">Load Turn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col right-align">
+                        <button type="button" class="btn btn-primary add-turn-btn">Add Turn</button>
+                        <button type="button" class="btn btn-danger delete-turn-btn">Delete Turn</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col card">
+                        <div class="card-block">
+                            <h2>Additional Options</h2>
+                            <input class="daily-dialog-box" type="checkbox" name="daily-dialog" value="daily-dialog" data-toggle="tooltip" data-placement="top" title="Check this box to attempt closing the daily quest completion dialog at the end of the mission. This option may cause problems if you have enough energy remaining to embark on another mission."> Close Daily Quest Dialog
+                            <br> Wait After Completion: <input class="end-wait-input" type="number" value="0" name="end-wait" placeholder="In seconds" data-toggle="tooltip" data-placement="top" title="Adds an aditional delay at the end of the macro. (In seconds)">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-success generate-btn">Generate</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <textarea name="output" id="output" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-success copy-btn">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- jQuery first, then Tether, then Bootstrap JS. -->
+            <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+                crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+                crossorigin="anonymous"></script>
+            <script src="js/bootstrap.min.js"></script>
+            <script src="js/macro.js"></script>
+            <script>
+                $(document).ready(function () {
+
+                    $(function () {
+                        $('[data-toggle="tooltip"]').tooltip()
+                    })
+
+                    $('.add-turn-btn').click(addTurn);
+
+                    $('.delete-turn-btn').click(delTurn);
+
+                    $('.generate-btn').click(generate);
+
+                    $('.companion-box').click(toggleManualComp);
+
+                    $(".copy-btn").click(copy);
+
+                    $('body').on('click', '.toggle-turn-options-btn', function () {
+                        toggleOptions($(this));
+                    });
+
+                    $('body').on('click', '.advanced-btn', function () {
+                        toggleAdvanced($(this));
+                    });
+
+                    $('body').on('click', '.data-btn', function () {
+                        toggleData($(this));
+                    });
+
+
+                    $('body').on('click', '.repeat-box', function () {
+                        repeatToggle($(this));
+                    });
+
+                    $('body').on('click', '.dualcast-box', function () {
+                        toggleDualCast($(this));
+                    });
+
+                    $('body').on('click', '.delay-up', function () {
+                        unitOrderUp($(this));
+                    });
+
+                    $('body').on('click', '.delay-down', function () {
+                        unitOrderDown($(this));
+                    });
+                    
+                    $('body').on('click', '.save-btn', function () {
+                        
+                    });
+
+                    $('body').on('click', '.load-btn', function () {
+                        
+                    });
+
+                    $('body').on('click', '.import-btn', function () {
+                        importTurn($(this));
+                    });
+
+                    $('body').on('click', '.export-btn', function () {
+                        exportTurn($(this));
+                    });
+
+                    $('body').on('click', '.copy-turn-btn', function () {
+                        copyTurn($(this));
+                    });
+
+                });
+            </script>
+</body>
+
+</html>
