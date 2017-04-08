@@ -36,20 +36,20 @@ function toggleData(btn) {
     btn.parents(".turn-options").children(".data-options").toggleClass("hidden");
 }
 
-function repeatToggle(btn) {
-    if (btn.is(':checked')) {
-        btn.parents('.right-align').children(".toggle-turn-options-btn").toggleClass("disabled");
-        if (!btn.parents(".card-block").children(".turn-options").hasClass('hidden')) {
-            btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
-        }
-    } else {
-        btn.parents('.right-align').children(".toggle-turn-options-btn").toggleClass("disabled");
-        if (btn.parents(".card-block").children(".turn-options").hasClass('hidden')) {
-            btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
-        }
-    }
-
-}
+// function repeatToggle(btn) {
+//     if (btn.is(':checked')) {
+//         btn.parents('.right-align').children(".toggle-turn-options-btn").toggleClass("disabled");
+//         if (!btn.parents(".card-block").children(".turn-options").hasClass('hidden')) {
+//             btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
+//         }
+//     } else {
+//         btn.parents('.right-align').children(".toggle-turn-options-btn").toggleClass("disabled");
+//         if (btn.parents(".card-block").children(".turn-options").hasClass('hidden')) {
+//             btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
+//         }
+//     }
+//
+// }
 
 //Toggles display of the dualcast ability selects
 function toggleDualCast(btn) {
@@ -79,7 +79,6 @@ function unitOrderDown(btn) {
 //Calls the main macro building function and outputs the result to the output box
 function generate() {
     var macro = buildMacro();
-    console.log(macro);
     $("#output").val("");
     $("#output").val(macro);
 }
@@ -89,7 +88,7 @@ function toggleManualComp() {
     if ($('.manual-box').is(':checked') && $(".manual-time-form").hasClass("hidden")) {
         $(".manual-time-form").toggleClass("hidden");
     }
-    if ($('.manual-box').is(':checked') == false && $(".manual-time-form").hasClass("hidden") == false) {
+    if ($('.manual-box').is(':checked') === false && $(".manual-time-form").hasClass("hidden") === false) {
         $(".manual-time-form").toggleClass("hidden");
     }
 }
@@ -124,6 +123,20 @@ var unitLoc = ['--VINPUT--MULTI:1:0:860:535\r\n',
     '--VINPUT--MULTI:1:0:1100:30\r\n'
 ];
 
+//Delay Global variables
+// var startWait = 2000000; //wait after selecting mission before next button
+// var companionScrollWait = 2000000; //Wait before scrolling companion screen
+// var companionClickWait = 2000000; //Wait before clicking companion
+// var departWait = 2000000;//wait before clicking depart
+// var beginWait = 10000000;//wait before begining first turn after depart
+// var finalTurnWait = 10000000;//Additional wait time afer last turn
+var startWait; //wait after selecting mission before next button
+var companionScrollWait; //Wait before scrolling companion screen
+var companionClickWait; //Wait before clicking companion
+var departWait;//wait before clicking depart
+var beginWait;//wait before begining first turn after depart
+var finalTurnWait;//Additional wait time afer last turn
+
 
 var unitColLoc = ["535", "30", "535", "30", "535", "30"];
 var unitRowLoc = ["860", "860", "980", "980", "1100", "1100"];
@@ -132,6 +145,8 @@ var unitRowLoc = ["860", "860", "980", "980", "1100", "1100"];
 function buildMacro() {
     var macro = "";
     time = 100000;
+
+    setWaitValues();
 
     macro += getMissionString();
     macro += getStartNextString();
@@ -182,7 +197,7 @@ function getMissionString() {
 function getStartNextString() {
     var macro = "";
 
-    addTime(1000000);
+    addTime(startWait);
 
     macro += getTime() + vinput + "0:1123:360\r\n";
     macro += getTime() + endClick;
@@ -196,12 +211,13 @@ function getCompanionString() {
     var macro = "";
     var customDelay;
 
-    addTime(1000000);
+    addTime(companionScrollWait);
 
     if (!$('.manual-box').is(":checked")) {
 
         //Select 3rd Companion Option
         if ($("input[name='companion']:checked").val() == "true") {
+            addTime(companionClickWait);
             macro += getTime() + vinput + "0:828:660\r\n";
         }
 
@@ -214,13 +230,12 @@ function getCompanionString() {
                 macro += (time += 1000) + vinput + "2:" + y + ":10\r\n";
             }
             macro += getTime() + endClick;
-            addTime(500000);
+            addTime(companionClickWait);
             macro += getTime() + vinput + "0:1201:364\r\n";
         }
 
         macro += getTime() + endClick;
 
-        addTime(1000000);
     } else {
         customDelay = parseInt($(".manual-time-value").val()) * 1000000;
         addTime(customDelay);
@@ -233,10 +248,11 @@ function getCompanionString() {
 function getDepartString() {
     var macro = "";
 
+    addTime(departWait);
     macro += getTime() + vinput + "0:1127:435\r\n";
     macro += getTime() + endClick;
     macro += getTime() + mouse;
-    addTime(10000000);
+    addTime(beginWait);
 
     return macro;
 }
@@ -264,16 +280,16 @@ function getTurnsString() {
 
     //For Each turn get each action
     for (var i = 0; i < turns; i++) {
-        repeat = $(".turn-" + (i + 1)).find("input[name='repeat']:checked").val();
+        // repeat = $(".turn-" + (i + 1)).find("input[name='repeat']:checked").val();
 
         //For each unit
         for (var j = 1; j < 7; j++) {
 
-            if (repeat === "repeat") {
-                macro += getTime() + vinput + "0:1230:450\r\n";
-                macro += getTime() + endClick;
-                break;
-            }
+            // if (repeat === "repeat") {
+            //     macro += getTime() + vinput + "0:1230:450\r\n";
+            //     macro += getTime() + endClick;
+            //     break;
+            // }
 
             unit = j;
             action = $(".turn-" + (i + 1)).find("input[name='unit-" + j + "-action']:checked").val();
@@ -299,7 +315,7 @@ function getTurnsString() {
 
         //Build activate string
         for (var y = 0; y < 6; y++) {
-            if (repeat === "repeat") break;
+            // if (repeat === "repeat") break;
             macro += "" + (time += delays[y]) + unitLoc[order[y] - 1];
             macro += (time += 1) + endClick;
         }
@@ -307,8 +323,9 @@ function getTurnsString() {
         //Wait before executing next turn
 
         addTime(parseInt($(".turn-" + (i + 1)).find(".advanced-options").find(".turn-delay").val()) * 1000000);
+        //Check if final turn and add finalTurnWait
         if (i === (turns - 1)) {
-            addTime(10000000);
+            addTime(finalTurnWait);
         }
     }
 
@@ -773,7 +790,6 @@ function setTurnValues(json, turn) {
     // $(".turn-1").find("input[value='attack']").prop('checked', true);
 
     $(".turn-" + (turn)).find(".unit-1").find("input[value='" + turnObj.unit1.action + "']").prop('checked', true);
-    console.log($(".turn-" + (turn)).find("input[value='" + turnObj.unit1.action + "']"));
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit1.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit1.target);
     if (turnObj.unit1.dc === true) {
@@ -879,4 +895,14 @@ function importTurn(btn) {
     turnString = btn.parents(".data-options").find(".import-export").val();
 
     setTurnValues(turnString, turn);
+}
+
+//Sets the global wait variables before macro generation
+function setWaitValues() {
+  startWait = parseInt($('.start-wait-input').val()) * 1000000;
+  companionScrollWait = parseInt($('.companion-scroll-wait-input').val()) * 1000000;
+  companionClickWait = parseInt($('.companion-click-wait-input').val()) * 1000000;
+  departWait = parseInt($('.depart-wait-input').val()) * 1000000;
+  beginWait = parseInt($('.begin-wait-input').val()) * 1000000;
+  finalTurnWait = parseInt($('.final-turn-wait-input').val()) * 1000000;
 }
