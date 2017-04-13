@@ -21,9 +21,24 @@ function delTurn() {
     if ($(".turn").length > 1) $(".turn").last().remove();
 }
 
+//Toggles display of ability/item options
+function abilityOptions(btn) {
+    var action = btn.find('input').val();
+
+    if (action === "ability" || action === "item") {
+        if (btn.parents('.unit-action').find('.ability-options').hasClass('hidden')) {
+            btn.parents('.unit-action').find('.ability-options').toggleClass('hidden');
+        }
+    } else {
+        if (!btn.parents('.unit-action').find('.ability-options').hasClass('hidden')) {
+            btn.parents('.unit-action').find('.ability-options').toggleClass('hidden');
+        }
+    }
+}
+
 //toggles display of the main turn options
 function toggleOptions(btn) {
-    btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
+    btn.parents(".card").children('.card-block').children(".turn-options").toggleClass("hidden");
 }
 
 //Toggle display of turns timing menu
@@ -36,32 +51,13 @@ function toggleData(btn) {
     btn.parents(".turn-options").children(".data-options").toggleClass("hidden");
 }
 
-// function repeatToggle(btn) {
-//     if (btn.is(':checked')) {
-//         btn.parents('.right-align').children(".toggle-turn-options-btn").toggleClass("disabled");
-//         if (!btn.parents(".card-block").children(".turn-options").hasClass('hidden')) {
-//             btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
-//         }
-//     } else {
-//         btn.parents('.right-align').children(".toggle-turn-options-btn").toggleClass("disabled");
-//         if (btn.parents(".card-block").children(".turn-options").hasClass('hidden')) {
-//             btn.parents(".card-block").children(".turn-options").toggleClass("hidden");
-//         }
-//     }
-//
-// }
 
 //Toggles display of the dualcast ability selects
 function toggleDualCast(btn) {
-    if (btn.is(':checked')) {
-        if (btn.parents(".unit-action").children(".dualcast-select").hasClass('hidden')) {
-            btn.parents(".unit-action").children(".dualcast-select").toggleClass("hidden");
-        }
-    } else {
-        if (!btn.parents(".unit-action").children(".dualcast-select").hasClass('hidden')) {
-            btn.parents(".unit-action").children(".dualcast-select").toggleClass("hidden");
-        }
-    }
+    btn.button('toggle');
+    btn.siblings('select').prop('disabled', function (i, v) {
+        return !v;
+    });
 }
 
 //Moves the clicked unit order up by one.
@@ -81,6 +77,7 @@ function generate() {
     var macro = buildMacro();
     $("#output").val("");
     $("#output").val(macro);
+    $('.total-time').text(timeToString(time));
 }
 
 //Toggles display of the manual companion select delay entry
@@ -105,6 +102,11 @@ function copyTurn(btn) {
     document.execCommand('copy');
 }
 
+function copyMacroData() {
+    $(".macro-import-export").select();
+    document.execCommand('copy');
+}
+
 //////////////////////////////////
 // String Generators            //
 //////////////////////////////////
@@ -122,20 +124,16 @@ var unitLoc = ['--VINPUT--MULTI:1:0:860:535\r\n',
     '--VINPUT--MULTI:1:0:1100:535\r\n',
     '--VINPUT--MULTI:1:0:1100:30\r\n'
 ];
+var autoLoc = "0:1230:630\r\n";
+var repeatLoc = "0:1230:450\r\n";
 
 //Delay Global variables
-// var startWait = 2000000; //wait after selecting mission before next button
-// var companionScrollWait = 2000000; //Wait before scrolling companion screen
-// var companionClickWait = 2000000; //Wait before clicking companion
-// var departWait = 2000000;//wait before clicking depart
-// var beginWait = 10000000;//wait before begining first turn after depart
-// var finalTurnWait = 10000000;//Additional wait time afer last turn
 var startWait; //wait after selecting mission before next button
 var companionScrollWait; //Wait before scrolling companion screen
 var companionClickWait; //Wait before clicking companion
-var departWait;//wait before clicking depart
-var beginWait;//wait before begining first turn after depart
-var finalTurnWait;//Additional wait time afer last turn
+var departWait; //wait before clicking depart
+var beginWait; //wait before begining first turn after depart
+var finalTurnWait; //Additional wait time afer last turn
 
 
 var unitColLoc = ["535", "30", "535", "30", "535", "30"];
@@ -271,25 +269,23 @@ function getTurnsString() {
     var ab2;
     var delays = [];
     var order = [];
+    var skip = [false, false, false, false, false];
     var adv;
     var delayForm;
     var repeat;
+    var auto;
 
     //Count how many turns
     turns = $('.turn').length;
 
     //For Each turn get each action
     for (var i = 0; i < turns; i++) {
-        // repeat = $(".turn-" + (i + 1)).find("input[name='repeat']:checked").val();
+        repeat = $(".turn-" + (i + 1)).find("input[name='repeat']:checked").val();
+        auto = $(".turn-" + (i + 1)).find("input[name='auto']:checked").val();
+        skip = [false, false, false, false, false];
 
         //For each unit
         for (var j = 1; j < 7; j++) {
-
-            // if (repeat === "repeat") {
-            //     macro += getTime() + vinput + "0:1230:450\r\n";
-            //     macro += getTime() + endClick;
-            //     break;
-            // }
 
             unit = j;
             action = $(".turn-" + (i + 1)).find("input[name='unit-" + j + "-action']:checked").val();
@@ -303,9 +299,16 @@ function getTurnsString() {
             ab1 = $(".turn-" + (i + 1)).find('.unit-' + j + '-action').find('.dc1-ability-select').val();
             ab2 = $(".turn-" + (i + 1)).find('.unit-' + j + '-action').find('.dc2-ability-select').val();
             macro += getActionString(unit, action, ability, target, dc, ab1, ab2);
+            if (action === "none") {
+                skip[j] = true;
+            } else {
+                skip[j] = false;
+            }
         }
 
         //Activate Units in order
+        order = [];
+        delays = [];
         adv = $(".turn-" + (i + 1)).find(".advanced-options");
         delayForm = adv.find(".delay-unit-form");
         delayForm.each(function (index) {
@@ -315,9 +318,21 @@ function getTurnsString() {
 
         //Build activate string
         for (var y = 0; y < 6; y++) {
-            // if (repeat === "repeat") break;
+            if (skip[order[y]]) continue;
             macro += "" + (time += delays[y]) + unitLoc[order[y] - 1];
             macro += (time += 1) + endClick;
+        }
+
+        //Activate repeat/auto if enabled
+        if (repeat === "repeat") {
+            macro += getTime() + vinput + repeatLoc;
+            macro += getTime() + endClick;
+        }
+        if (auto === "auto") {
+            macro += getTime() + vinput + autoLoc;
+            macro += getTime() + endClick;
+            macro += getTime() + vinput + autoLoc;
+            macro += getTime() + endClick;
         }
 
         //Wait before executing next turn
@@ -393,11 +408,15 @@ function getEndSkipString() {
 //Builds and returns string to close daily quest dialog
 function getDailyQuestString() {
     var macro = "";
+    macro += getTime() + mouse;
 
-    if ($(".daily-dialg-box").is(':checked')) {
+    if ($(".daily-dialog-box").is(':checked')) {
+        addTime(3000000);
         macro += getTime() + vinput + "0:791:534\r\n";
         macro += getTime() + endClick;
-        macro += getTime() + vinput + "0:748:518\r\n";
+        // macro += getTime() + vinput + "0:748:518\r\n";
+        addTime(1000000);
+        macro += getTime() + vinput + "0:790:380\r\n";
         macro += getTime() + endClick;
         macro += getTime() + mouse;
     }
@@ -630,6 +649,7 @@ function getTurnObject(turn) {
     var adv;
     var delayForm;
     var repeat;
+    var auto;
     var turnDelay;
     var actions = [
         ["", "", "", "", "", ""],
@@ -693,10 +713,12 @@ function getTurnObject(turn) {
         order: [],
         turnDelay: 0,
         repeat: false,
+        auto: false
     };
 
 
     repeat = $(".turn-" + (turn)).find("input[name='repeat']:checked").val();
+    auto = $(".turn-" + (turn)).find("input[name='auto']:checked").val();
 
     for (var j = 1; j < 7; j++) {
 
@@ -771,6 +793,7 @@ function getTurnObject(turn) {
     turnObj.order = order;
     turnObj.turnDelay = turnDelay;
     turnObj.repeat = repeat;
+    turnObj.auto = auto;
 
     var turnString = JSON.stringify(turnObj);
 
@@ -783,17 +806,15 @@ function setTurnValues(json, turn) {
     var turnObj = JSON.parse(json);
     var counter = 0;
 
-    repeat = $(".turn-" + (turnObj.turn)).find("input[value='repeat']:checked").val();
-
     var j = 1;
 
-    // $(".turn-1").find("input[value='attack']").prop('checked', true);
-
-    $(".turn-" + (turn)).find(".unit-1").find("input[value='" + turnObj.unit1.action + "']").prop('checked', true);
+    //God this is gross, try to do this better at some point
+    $(".turn-" + (turn)).find(".unit-1").find("input[value='" + turnObj.unit1.action + "']").click();
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit1.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit1.target);
     if (turnObj.unit1.dc === true) {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
+        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
     } else {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
     }
@@ -802,11 +823,12 @@ function setTurnValues(json, turn) {
 
     j++;
 
-    $(".turn-" + (turn)).find(".unit-2").find("input[value='" + turnObj.unit2.action + "']").prop('checked', true);
+    $(".turn-" + (turn)).find(".unit-2").find("input[value='" + turnObj.unit2.action + "']").click();
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit2.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit2.target);
     if (turnObj.unit2.dc === true) {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
+        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
     } else {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
     }
@@ -815,11 +837,12 @@ function setTurnValues(json, turn) {
 
     j++;
 
-    $(".turn-" + (turn)).find(".unit-3").find("input[value='" + turnObj.unit3.action + "']").prop('checked', true);
+    $(".turn-" + (turn)).find(".unit-3").find("input[value='" + turnObj.unit3.action + "']").click();
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit3.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit3.target);
     if (turnObj.unit3.dc === true) {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
+        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
     } else {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
     }
@@ -828,11 +851,12 @@ function setTurnValues(json, turn) {
 
     j++;
 
-    $(".turn-" + (turn)).find(".unit-4").find("input[value='" + turnObj.unit4.action + "']").prop('checked', true);
+    $(".turn-" + (turn)).find(".unit-4").find("input[value='" + turnObj.unit4.action + "']").click();
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit4.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit4.target);
     if (turnObj.unit4.dc === true) {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
+        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
     } else {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
     }
@@ -841,11 +865,12 @@ function setTurnValues(json, turn) {
 
     j++;
 
-    $(".turn-" + (turn)).find(".unit-5").find("input[value='" + turnObj.unit5.action + "']").prop('checked', true);
+    $(".turn-" + (turn)).find(".unit-5").find("input[value='" + turnObj.unit5.action + "']").click();
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit5.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit5.target);
     if (turnObj.unit5.dc === true) {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
+        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
     } else {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
     }
@@ -854,11 +879,12 @@ function setTurnValues(json, turn) {
 
     j++;
 
-    $(".turn-" + (turn)).find(".unit-6").find("input[value='" + turnObj.unit6.action + "']").prop('checked', true);
+    $(".turn-" + (turn)).find(".unit-6").find("input[value='" + turnObj.unit6.action + "']").siblings('label').click();
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit6.ability);
     $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit6.target);
     if (turnObj.unit6.dc === true) {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
+        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
     } else {
         $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
     }
@@ -874,6 +900,8 @@ function setTurnValues(json, turn) {
     });
 
     $(".turn-" + (turn)).find(".advanced-options").find(".turn-delay").val(turnObj.turnDelay / 1000000);
+    if(turnObj.repeat === "repeat") $(".turn-" + (turn)).find("input[value='repeat']").prop('checked', true);
+    if(turnObj.auto === "auto") $(".turn-" + (turn)).find("input[value='auto']").prop('checked', true);
 
 }
 
@@ -897,12 +925,157 @@ function importTurn(btn) {
     setTurnValues(turnString, turn);
 }
 
+//Import turns from bottom box
+//Will improve to add other options eventually
+function importMacro() {
+    var data = $('.macro-import-export').val();
+    var turns;
+
+    data = data.split('#');
+    turns = data.length - 1;
+
+    while($('.turn').length < turns - 1) {
+        addTurn();
+    }
+
+    for (var i = 0; i < turns - 1; i++) {
+        setTurnValues(data[i], i + 1);
+    }
+
+    console.log(data[turns - 1]);
+
+    importOptionValues(data[turns - 1]);
+
+}
+
+//Generates string containing all turn data
+function exportMacro() {
+    var macroDataString;
+    var turnString = "";
+    var turns = $('.turn').length;
+
+    for (var i = 0; i < turns; i++) {
+        turnString += getTurnObject(i+1);
+        turnString += "#";
+    }
+
+    macroDataString = turnString;
+    macroDataString += getOptionsObj();
+    macroDataString += "#";
+
+
+    $('.macro-import-export').val("");
+    $('.macro-import-export').val(macroDataString);
+
+}
+
+//Gets all macro options as object
+function getOptionsObj() {
+    var optionObj = {
+        mission: 0,
+        companion: 0,
+        companionManualDelay: 0,
+        dailyDialog: false,
+        startWait: 0,
+        companionScrollWait: 0,
+        companionClickWait: 0,
+        departWait: 0,
+        beginWait: 0,
+        finalTurnWait: 0,
+        endWait: 0
+    };
+
+    optionObj.mission = $("#mission-num").val();
+    optionObj.companion = $("input[name='companion']:checked").val();
+    optionObj.companionManualDelay = $('#manual-time-form').val();
+    if ($(".daily-dialog-box").is(':checked')) {
+        optionObj.dailyDialog = true;
+    } else {
+        optionObj.dailyDialog = false;
+    }
+    optionObj.startWait = $('.start-wait-input').val();
+    optionObj.companionScrollWait = $('.companion-scroll-wait-input').val();
+    optionObj.companionClickWait = $('.companion-click-wait-input').val();
+    optionObj.departWait = $('.depart-wait-input').val();
+    optionObj.beginWait = $('.begin-wait-input').val();
+    optionObj.finalTurnWait = $('.final-turn-wait-input').val();
+    optionObj.endWait = $('.end-wait-input').val();
+
+    return JSON.stringify(optionObj);
+}
+
 //Sets the global wait variables before macro generation
 function setWaitValues() {
-  startWait = parseInt($('.start-wait-input').val()) * 1000000;
-  companionScrollWait = parseInt($('.companion-scroll-wait-input').val()) * 1000000;
-  companionClickWait = parseInt($('.companion-click-wait-input').val()) * 1000000;
-  departWait = parseInt($('.depart-wait-input').val()) * 1000000;
-  beginWait = parseInt($('.begin-wait-input').val()) * 1000000;
-  finalTurnWait = parseInt($('.final-turn-wait-input').val()) * 1000000;
+    startWait = parseInt($('.start-wait-input').val()) * 1000000;
+    companionScrollWait = parseInt($('.companion-scroll-wait-input').val()) * 1000000;
+    companionClickWait = parseInt($('.companion-click-wait-input').val()) * 1000000;
+    departWait = parseInt($('.depart-wait-input').val()) * 1000000;
+    beginWait = parseInt($('.begin-wait-input').val()) * 1000000;
+    finalTurnWait = parseInt($('.final-turn-wait-input').val()) * 1000000;
+}
+
+//Sets the input fields with values from object
+function importOptionValues(json) {
+
+    var obj = JSON.parse(json);
+
+    $("#mission-num").val(obj.mission);
+    $("input[value='" + obj.companion + "']").click();
+    toggleManualComp();
+    $('#manual-time-form').val(obj.companionManualDelay);
+    if (obj.dailyDialog) $(".daily-dialog-box").click();
+    $('.start-wait-input').val(parseInt(obj.startWait));
+    $('.companion-scroll-wait-input').val(parseInt(obj.companionScrollWait));
+    $('.companion-click-wait-input').val(parseInt(obj.companionClickWait));
+    $('.depart-wait-input').val(parseInt(obj.departWait));
+    $('.begin-wait-input').val(parseInt(obj.beginWait));
+    $('.final-turn-wait-input').val(parseInt(obj.finalTurnWait));
+    $('.end-wait-input').val(parseInt(obj.endWait));
+}
+
+//Creates unit frames 2-6
+function addUnitHtml() {
+    var unit = $('.unit-container').clone();
+    var clean;
+
+    unit.find('.unit-1').removeClass('unit-1');
+    unit.find('.unit-1-action').removeClass('unit-1-action');
+    clean = unit.clone();
+
+    for (var i = 2; i < 7; i++) {
+        unit.find('.unit-div').addClass('unit-' + i);
+        unit.find('.unit-title').text('Unit ' + i);
+        unit.find('.unit-action').addClass('unit-' + i + '-action');
+        unit.find("input[name='unit-1-action']").attr('name', 'unit-' + i + '-action');
+
+       unit.appendTo('.unit-row');
+       unit = clean.clone();
+    }
+
+    
+}
+
+function timeToString(t) {
+    var s;
+    var m;
+    var h;
+    var timeString;
+    //Down to seconds, 2 decimals
+    t = t / 1000000;
+    s = t.toFixed(2);
+
+    m = s/60;
+    h = m/60;
+
+    s = s % 60;
+    m = m % 60;
+
+    s =  Math.round(s * 100) / 100;
+    m = Math.floor(m);
+    h = Math.floor(h);
+
+    timeString = "H:" + h + " M:" + m + " S:" + s;
+
+
+    return timeString;
 }

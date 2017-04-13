@@ -3,7 +3,8 @@
 }
 
 .right-align {
-    text-align: right;
+    /*text-align: right;*/
+    float: right;
 }
 
 .hidden {
@@ -21,4 +22,43 @@
 
 body {
     padding-top: 50px;
+}
+
+.padding-left {
+    padding-left: 10px;
+}
+
+.card-width {
+    min-width: 100%;
+}
+
+.card-header {
+    background-color: #00195d;
+    color: #FAFAFA;
+}
+
+.unit-header {
+    background-color: #00a4ff;
+}
+
+.full-width {
+    min-width: 100%;
+}
+
+.custom-select {
+    line-height: 2em;
+}
+
+.dualcast-box {
+    background-color: #0275d8;
+    color: #FAFAFA;
+}
+
+.unit-container {
+    margin-bottom: 15px;
+}
+
+.reddit-link {
+    padding-left: 10px;
+    font-weight: bold;
 }
