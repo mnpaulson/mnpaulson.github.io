@@ -80,6 +80,13 @@ function generate() {
     $('.total-time').text(timeToString(time));
 }
 
+function generateNox() {
+    macro = convertToNox();
+    $("#output").val("");
+    $("#output").val(macro);
+    $('.total-time').text(timeToString(time));
+}
+
 //Toggles display of the manual companion select delay entry
 function toggleManualComp() {
     if ($('.manual-box').is(':checked') && $(".manual-time-form").hasClass("hidden")) {
@@ -126,6 +133,10 @@ var unitLoc = ['--VINPUT--MULTI:1:0:860:535\r\n',
 ];
 var autoLoc = "0:1230:630\r\n";
 var repeatLoc = "0:1230:450\r\n";
+var backLoc = "0:241:633\r\n"
+var closeNoNrgLoc = "0:790:350\r\n";
+var closeDailyLoc = "0:790:535\r\n";
+
 
 //Delay Global variables
 var startWait; //wait after selecting mission before next button
@@ -142,18 +153,33 @@ var unitRowLoc = ["860", "860", "980", "980", "1100", "1100"];
 //Calls main macro building functions, returns complete macro
 function buildMacro() {
     var macro = "";
+    var start = false;
+    var end = false;
     time = 100000;
+
+     if ($(".include-start-box").is(':checked')) {
+        start = true;
+     }
+     if ($(".include-end-box").is(':checked')) {
+        end = true;
+     }
 
     setWaitValues();
 
-    macro += getMissionString();
-    macro += getStartNextString();
-    macro += getCompanionString();
-    macro += getDepartString();
+    if (start) {
+        macro += getMissionString();
+        macro += getStartNextString();
+        macro += getCompanionString();
+        macro += getDepartString();
+    }
+
     macro += getTurnsString();
-    macro += getEndSkipString();
-    macro += getDailyQuestString();
-    macro += getEndWaitString();
+
+    if (end) {
+        macro += getEndSkipString();
+        macro += getDailyQuestString();
+        macro += getEndWaitString();
+    }
 
     return macro;
 }
@@ -165,24 +191,27 @@ function getMissionString() {
 
     mission = parseInt($("#mission-num").val());
 
-
-    macro += time + vinput;
-
     switch (mission) {
         case 1:
-            macro += "0:452:660\r\n";
+            macro += time + vinput + "0:452:660\r\n";
             break;
         case 2:
-            macro += "0:634:660\r\n";
+            macro += time + vinput + "0:634:660\r\n";
             break;
         case 3:
-            macro += "0:828:660\r\n";
+            macro += time + vinput + "0:828:660\r\n";
             break;
         case 4:
-            macro += "0:1020:660\r\n";
+            macro += time + vinput + "0:1020:660\r\n";
             break;
         case 5:
-            macro += "0:1205:660\r\n";
+            macro += time + vinput + "0:1205:660\r\n";
+            break;
+        case 6:
+            macro += scroll('down');
+            macro += scroll('down');
+            addTime(1000000);
+            macro += time + vinput + "0:1205:660\r\n";
             break;
     }
 
@@ -216,7 +245,7 @@ function getCompanionString() {
         //Select 3rd Companion Option
         if ($("input[name='companion']:checked").val() == "true") {
             addTime(companionClickWait);
-            macro += getTime() + vinput + "0:828:660\r\n";
+            macro += getTime() + vinput + "0:445:660\r\n";
         }
 
         //Click and drag scroll bar to bottom
@@ -410,15 +439,36 @@ function getDailyQuestString() {
     var macro = "";
     macro += getTime() + mouse;
 
+//Step  | Action            |                          Resulting State
+//   -  |   -               | Daily No NRG  | No Daily No NRG   | Daily w\NRG       | No Daily w\NRG
+//   1  | Close Dialy       | Mission Select| No NRG Window     | Mission Select    | Mission Rewards
+//   2  | Mission Select    | No NRG Window | No NRG Window     | Mission Rewards   | Missionn Rewards
+//   3  | Back + Close NRG  | Mission Select| Mission Select    | Mission Select    | Mission Select  
+
     if ($(".daily-dialog-box").is(':checked')) {
+
+        //Wait 3 seconds for load
         addTime(3000000);
-        macro += getTime() + vinput + "0:791:534\r\n";
+
+        //Close Daily (Step 1)
+        macro += getTime() + vinput + closeDailyLoc;
         macro += getTime() + endClick;
-        // macro += getTime() + vinput + "0:748:518\r\n";
+
+        //Mission Select (Step 2)
+        //Use current Mission to make sure it exists (helps with Raids where position will be off)
+        addTime(3000000);
+        macro += getMissionString();
+
+        //Click back and then immediatly Close No NRG window (Step 3)
+        macro += getTime() + mouse;
         addTime(1000000);
-        macro += getTime() + vinput + "0:790:380\r\n";
+        macro += getTime() + vinput + backLoc;
+        macro += getTime() + endClick;
+        addTime(100000);
+        macro += getTime() + vinput + closeNoNrgLoc;
         macro += getTime() + endClick;
         macro += getTime() + mouse;
+
     }
 
     return macro;
@@ -982,7 +1032,9 @@ function getOptionsObj() {
         departWait: 0,
         beginWait: 0,
         finalTurnWait: 0,
-        endWait: 0
+        endWait: 0,
+        includeStart: true,
+        includeEnd: true
     };
 
     optionObj.mission = $("#mission-num").val();
@@ -1000,6 +1052,16 @@ function getOptionsObj() {
     optionObj.beginWait = $('.begin-wait-input').val();
     optionObj.finalTurnWait = $('.final-turn-wait-input').val();
     optionObj.endWait = $('.end-wait-input').val();
+    if ($(".include-start-box").is(':checked')) {
+        optionObj.includeStart = true;
+    } else {
+        optionObj.includeStart = false;
+    }
+    if ($(".include-end-box").is(':checked')) {
+        optionObj.includeEnd = true;
+    } else {
+        optionObj.includeEnd = false;
+    }
 
     return JSON.stringify(optionObj);
 }
@@ -1023,7 +1085,8 @@ function importOptionValues(json) {
     $("input[value='" + obj.companion + "']").click();
     toggleManualComp();
     $('#manual-time-form').val(obj.companionManualDelay);
-    if (obj.dailyDialog) $(".daily-dialog-box").click();
+    if (obj.dailyDialog && !$(".daily-dialog-box").is(':checked')) $(".daily-dialog-box").click();
+    if (!obj.dailyDialog && $(".daily-dialog-box").is(':checked')) $(".daily-dialog-box").click();
     $('.start-wait-input').val(parseInt(obj.startWait));
     $('.companion-scroll-wait-input').val(parseInt(obj.companionScrollWait));
     $('.companion-click-wait-input').val(parseInt(obj.companionClickWait));
@@ -1031,6 +1094,10 @@ function importOptionValues(json) {
     $('.begin-wait-input').val(parseInt(obj.beginWait));
     $('.final-turn-wait-input').val(parseInt(obj.finalTurnWait));
     $('.end-wait-input').val(parseInt(obj.endWait));
+    if (obj.includeStart && !$(".include-start-box").is(':checked')) $(".include-start-box").click();
+    if (!obj.includeStart && $(".include-start-box").is(':checked')) $(".include-start-box").click();
+    if (obj.includeEnd && !$(".include-end-box").is(':checked')) $(".include-end-box").click();
+    if (!obj.includeEnd && $(".include-end-box").is(':checked')) $(".include-end-box").click();
 }
 
 //Creates unit frames 2-6
@@ -1078,4 +1145,38 @@ function timeToString(t) {
 
 
     return timeString;
+}
+
+function convertToNox() {
+  	// basic pattern
+    var pattern = /(\d+)--VINPUT--MULTI:1:(\d):(-?\d+):(-?\d+)/g;
+    // get the memu version
+    var str = buildMacro();
+    // remove the last two digits of timing first
+    str = str.replace((/.{3}--VINPUT--/g), "--VINPUT--");
+    // replace the multi-inputs
+    var n = str.replace(pattern, "\$2|\$4|\$3|0|0|0|\$1|720|1280");  
+    // replace the mouse clicks (needs two)
+    var pattern2 = /(\d+)--VINPUT--MOUSE:(-?\d+):(-?\d+)/g;    
+    var n2 = n.replace(pattern2, "0|0|0|0|0|0|$1|720|1280" + "\r\n" + "1|0|0|0|0|0|$1|720|1280");
+    // var n2 = n.replace(pattern2, "");
+    // flip x and y, reverse x
+    var a = n2.split('\r\n');
+    var start;
+    var split;
+    var t1, t2;
+    for (var i = 0; i < a.length - 1; i++) {
+        split = a[i].split('|');
+        t1 = split[1];
+        t2 = split[2];
+        t2 = parseInt(t2);
+        t1 = Math.abs(t1 - 720);
+        split[2] = t2;
+        split[1] = t1;
+        split = split.join('|');
+        a[i] = split;
+    }
+    a = a.join('\r\n');
+    // write the output
+    return a;
 }

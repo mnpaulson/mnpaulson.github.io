@@ -15,8 +15,7 @@
 
 <body>
     <div class="container">
-        <h1>FFBE MEMU Macro Generator v0.2</h1>
-        <h6 class="credits">Created by Felfe</h6>
+        <h1>Exvius Macro Maker v1</h1>
         <div class="row">
 
         </div>
@@ -35,6 +34,7 @@
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
+                        <option value="6">6</option>
                     </select>
                             </div>
                     </div>
@@ -65,7 +65,6 @@
                                     </div>
                                 </form>
                                 </span>
-                                <!--Delay Time (Seconds): <input class="manual-time-value" type="number" name="manual-time" value="5">-->
                             </form>
                     </div>
                 </div>
@@ -393,6 +392,16 @@
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">Close Daily Quest Dialog</span>
                 </label>
+                <label class="custom-control custom-checkbox">
+                    <input class="custom-control-input include-start-box" type="checkbox" name="include-start" value="include-start" checked>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Include Mission Start</span>
+                </label>
+                <label class="custom-control custom-checkbox">
+                    <input class="custom-control-input include-end-box" type="checkbox" name="include-end" value="include-end" checked>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Include Mission End</span>
+                </label>
             </div>
         </div>
     </div>
@@ -462,9 +471,10 @@
             <div class="card-block">
                 <div class="col">
                     <div class="row">
-                        <h4 class="card-title">MEMU Macro Output</h4>
+                        <h4 class="card-title">Macro Output</h4>
                         <div class="col">
-                            <button type="button" class="btn btn-success generate-btn">Generate</button>
+                            <button type="button" class="btn btn-primary generate-memu-btn">Generate MEmu</button>
+                            <button type="button" class="btn btn-warning generate-nox-btn">Generate Nox</button>
                         </div>
                         <div class="col">
                             Total Macro Time: <span class="total-time"></span>
@@ -479,7 +489,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <h4 class="card-title">FFBE MEMU Macro Generator Data</h4>
+                        <h4 class="card-title">Exvius Macro Maker Data</h4>
                         <div class="col">
                             <button type="button" class="btn btn-success export-macro-btn">Export</button>
                             <button type="button" class="btn btn-primary import-macro-btn">Import</button>
@@ -497,7 +507,7 @@
             </div>
         </div>
     </div>
-        <div class="row">
+    <div class="row">
         <div class="full-width card">
             <div class="card-header">
                 <h3 class="card-feature">Help</h3>
@@ -527,7 +537,7 @@
 
             addUnitHtml();
 
-            $('.tooltip-btn').click(function(){
+            $('.tooltip-btn').click(function () {
                 $('[data-toggle="tooltip"]').tooltip();
             });
 
@@ -535,7 +545,9 @@
 
             $('.delete-turn-btn').click(delTurn);
 
-            $('.generate-btn').click(generate);
+            $('.generate-memu-btn').click(generate);
+
+            $('.generate-nox-btn').click(generateNox);
 
             $('.companion-box').click(toggleManualComp);
 
@@ -596,6 +608,22 @@
             });
 
         });
+    </script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-97446873-1', 'auto');
+        ga('send', 'pageview');
     </script>
 </body>
 
