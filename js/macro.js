@@ -125,11 +125,11 @@ var clickWait = 10000;
 var endClick = "--VINPUT--MULTI:1:1:0:1578\r\n";
 var mouse = "--VINPUT--MOUSE:392:1276\r\n";
 var unitLoc = ['--VINPUT--MULTI:1:0:860:535\r\n',
-    '--VINPUT--MULTI:1:0:860:30\r\n',
+    '--VINPUT--MULTI:1:0:860:100\r\n',
     '--VINPUT--MULTI:1:0:980:535\r\n',
-    '--VINPUT--MULTI:1:0:980:30\r\n',
+    '--VINPUT--MULTI:1:0:980:100\r\n',
     '--VINPUT--MULTI:1:0:1100:535\r\n',
-    '--VINPUT--MULTI:1:0:1100:30\r\n'
+    '--VINPUT--MULTI:1:0:1100:100\r\n'
 ];
 var autoLoc = "0:1230:630\r\n";
 var repeatLoc = "0:1230:450\r\n";
@@ -145,9 +145,10 @@ var companionClickWait; //Wait before clicking companion
 var departWait; //wait before clicking depart
 var beginWait; //wait before begining first turn after depart
 var finalTurnWait; //Additional wait time afer last turn
+var abilityWait = 500000;
 
 
-var unitColLoc = ["535", "30", "535", "30", "535", "30"];
+var unitColLoc = ["535", "100", "535", "100", "535", "100"];
 var unitRowLoc = ["860", "860", "980", "980", "1100", "1100"];
 
 //Calls main macro building functions, returns complete macro
@@ -328,6 +329,7 @@ function getTurnsString() {
             ab1 = $(".turn-" + (i + 1)).find('.unit-' + j + '-action').find('.dc1-ability-select').val();
             ab2 = $(".turn-" + (i + 1)).find('.unit-' + j + '-action').find('.dc2-ability-select').val();
             macro += getActionString(unit, action, ability, target, dc, ab1, ab2);
+            addTime(abilityWait);
             if (action === "none") {
                 skip[j] = true;
             } else {
@@ -394,7 +396,7 @@ function getEndSkipString() {
     macro += getTime() + mouse;
 
     //wait 2 seconds
-    addTime(2000000);
+    addTime(3000000);
 
     //More Skips
     macro += getTime() + vinput + "0:1275:718\r\n";
@@ -407,9 +409,15 @@ function getEndSkipString() {
     macro += getTime() + endClick;
     macro += getTime() + vinput + "0:1275:718\r\n";
     macro += getTime() + endClick;
+    macro += getTime() + vinput + "0:1275:718\r\n";
+    macro += getTime() + endClick;
+    macro += getTime() + vinput + "0:1275:718\r\n";
+    macro += getTime() + endClick;
+    macro += getTime() + vinput + "0:1275:718\r\n";
+    macro += getTime() + endClick;
 
     //wait 2 seconds
-    addTime(2000000);
+    addTime(3000000);
 
     //More Skips
     macro += getTime() + vinput + "0:1275:718\r\n";
@@ -422,9 +430,15 @@ function getEndSkipString() {
     macro += getTime() + endClick;
     macro += getTime() + vinput + "0:1275:718\r\n";
     macro += getTime() + endClick;
+    macro += getTime() + vinput + "0:1275:718\r\n";
+    macro += getTime() + endClick;
+    macro += getTime() + vinput + "0:1275:718\r\n";
+    macro += getTime() + endClick;
+    macro += getTime() + vinput + "0:1275:718\r\n";
+    macro += getTime() + endClick;
 
     //wait 2 seconds
-    addTime(2000000);
+    addTime(3000000);
 
     //Next Click
     macro += getTime() + vinput + "0:1120:350\r\n";
@@ -456,7 +470,7 @@ function getDailyQuestString() {
 
         //Mission Select (Step 2)
         //Use current Mission to make sure it exists (helps with Raids where position will be off)
-        addTime(3000000);
+        addTime(5000000);
         macro += getMissionString();
 
         //Click back and then immediatly Close No NRG window (Step 3)
