@@ -137,7 +137,6 @@ var backLoc = "0:241:633\r\n"
 var closeNoNrgLoc = "0:790:350\r\n";
 var closeDailyLoc = "0:790:535\r\n";
 
-
 //Delay Global variables
 var startWait; //wait after selecting mission before next button
 var companionScrollWait; //Wait before scrolling companion screen
@@ -145,7 +144,8 @@ var companionClickWait; //Wait before clicking companion
 var departWait; //wait before clicking depart
 var beginWait; //wait before begining first turn after depart
 var finalTurnWait; //Additional wait time afer last turn
-var abilityWait = 500000;
+var abilityWait = 500000; //Wait between setting unit abilities
+var rewards = false; //Include or exclude additional results screen
 
 
 var unitColLoc = ["535", "100", "535", "100", "535", "100"];
@@ -390,12 +390,15 @@ function getEndSkipString() {
     macro += getTime() + vinput + "0:1275:718\r\n";
     macro += getTime() + endClick;
 
+    //Wait 1 second
+    addTime(1000000);
+
     //Next Click
     macro += getTime() + vinput + "0:1120:350\r\n";
     macro += getTime() + endClick;
     macro += getTime() + mouse;
 
-    //wait 2 seconds
+    //wait 3 seconds
     addTime(3000000);
 
     //More Skips
@@ -405,31 +408,31 @@ function getEndSkipString() {
     macro += getTime() + endClick;
     macro += getTime() + vinput + "0:1275:718\r\n";
     macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
 
-    //wait 2 seconds
+    //wait 3 seconds
     addTime(3000000);
 
+    if ($(".rewards-skip-box").is(':checked')) {
+        macro += getTime() + vinput + "0:1275:718\r\n";
+        macro += getTime() + endClick;
+        macro += getTime() + vinput + "0:1275:718\r\n";
+        macro += getTime() + endClick;
+        macro += getTime() + vinput + "0:1275:718\r\n";
+        macro += getTime() + endClick;
+
+        //wait 3 seconds
+        addTime(3000000);
+
+        //Next Click
+        macro += getTime() + vinput + "0:1120:350\r\n";
+        macro += getTime() + endClick;
+        macro += getTime() + mouse;
+
+        //wait 3 seconds
+        addTime(3000000);
+    }
+
     //More Skips
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
-    macro += getTime() + vinput + "0:1275:718\r\n";
-    macro += getTime() + endClick;
     macro += getTime() + vinput + "0:1275:718\r\n";
     macro += getTime() + endClick;
     macro += getTime() + vinput + "0:1275:718\r\n";
@@ -1040,6 +1043,7 @@ function getOptionsObj() {
         companion: 0,
         companionManualDelay: 0,
         dailyDialog: false,
+        rewardsSkip: false,
         startWait: 0,
         companionScrollWait: 0,
         companionClickWait: 0,
@@ -1075,6 +1079,11 @@ function getOptionsObj() {
         optionObj.includeEnd = true;
     } else {
         optionObj.includeEnd = false;
+    }
+    if ($(".rewards-skip-box").is(':checked')) {
+        optionObj.rewardsSkip = true;
+    } else {
+        optionObj.rewardsSkip = false;
     }
 
     return JSON.stringify(optionObj);
@@ -1112,6 +1121,8 @@ function importOptionValues(json) {
     if (!obj.includeStart && $(".include-start-box").is(':checked')) $(".include-start-box").click();
     if (obj.includeEnd && !$(".include-end-box").is(':checked')) $(".include-end-box").click();
     if (!obj.includeEnd && $(".include-end-box").is(':checked')) $(".include-end-box").click();
+    if (obj.rewardsSkip && !$(".rewards-skip-box").is(':checked')) $(".rewards-skip-box").click();
+    if (!obj.rewardsSkip && $(".rewards-skip-box").is(':checked')) $(".rewards-skip-box").click();
 }
 
 //Creates unit frames 2-6
