@@ -880,19 +880,19 @@ function setTurnValues(json, turn) {
             case 0:
                 unit = turnObj.unit1;
                 break;
-            case 0:
+            case 1:
                 unit = turnObj.unit2;
                 break;
-            case 0:
+            case 2:
                 unit = turnObj.unit3;
                 break;
-            case 0:
+            case 3:
                 unit = turnObj.unit4;
                 break;
-            case 0:
+            case 4:
                 unit = turnObj.unit5;
                 break;
-            case 0:
+            case 5:
                 unit = turnObj.unit6;
                 break;
         }
@@ -915,11 +915,11 @@ function setTurnValues(json, turn) {
     delayForm = adv.find(".delay-unit-form");
 
     //Remove all forms
-    adv.empty();
+    adv.find(".delay-unit-form").remove();
 
     //Add forms back in order
     for (var i = 0; i < 6; i++) {
-        adv.append(delayForm[turnObj.order[i] - 1]);
+        adv.prepend(delayForm[turnObj.order[i] - 1]);
     }
     
     //Get with new order
