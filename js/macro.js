@@ -872,96 +872,61 @@ function setTurnValues(json, turn) {
 
     var turnObj = JSON.parse(json);
     var counter = 0;
+    var unit;
 
-    var j = 1;
+    for (var i = 0; i < 6; i++) {
+        //Select the right unit
+        switch (i) {
+            case 0:
+                unit = turnObj.unit1;
+                break;
+            case 0:
+                unit = turnObj.unit2;
+                break;
+            case 0:
+                unit = turnObj.unit3;
+                break;
+            case 0:
+                unit = turnObj.unit4;
+                break;
+            case 0:
+                unit = turnObj.unit5;
+                break;
+            case 0:
+                unit = turnObj.unit6;
+                break;
+        }
 
-    //God this is gross, try to do this better at some point
-    $(".turn-" + (turn)).find(".unit-1").find("input[value='" + turnObj.unit1.action + "']").click();
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit1.ability);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit1.target);
-    if (turnObj.unit1.dc === true) {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
-    } else {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
+        $(".turn-" + (turn)).find(".unit-" + (i + 1)).find("input[value='" + unit.action + "']").click();
+        $(".turn-" + (turn)).find('.unit-' + (i + 1) + '-action').find('.ability-select').val(unit.ability);
+        $(".turn-" + (turn)).find('.unit-' + (i + 1) + '-action').find('.target-select').val(unit.target);
+        if (unit.dc === true) {
+            $(".turn-" + (turn)).find('.unit-' + (i + 1) + '-action').find("input[name='dualcast']").prop('checked', true);
+            $(".turn-" + (turn)).find('.unit-' + (i + 1) + '-action').find("input[name='dualcast']").click();
+        } else {
+            $(".turn-" + (turn)).find('.unit-' + (i + 1) + '-action').find("input[name='dualcast']").prop('checked', false);
+        }
+        $(".turn-" + (turn)).find('.unit-' + (i + 1) + '-action').find('.dc1-ability-select').val(unit.ab1);
+        $(".turn-" + (turn)).find('.unit-' + (i + 1) + '-action').find('.dc2-ability-select').val(unit.ab2);
+
     }
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc1-ability-select').val(turnObj.unit1.ab1);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc2-ability-select').val(turnObj.unit1.ab2);
-
-    j++;
-
-    $(".turn-" + (turn)).find(".unit-2").find("input[value='" + turnObj.unit2.action + "']").click();
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit2.ability);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit2.target);
-    if (turnObj.unit2.dc === true) {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
-    } else {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
-    }
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc1-ability-select').val(turnObj.unit2.ab1);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc2-ability-select').val(turnObj.unit2.ab2);
-
-    j++;
-
-    $(".turn-" + (turn)).find(".unit-3").find("input[value='" + turnObj.unit3.action + "']").click();
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit3.ability);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit3.target);
-    if (turnObj.unit3.dc === true) {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
-    } else {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
-    }
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc1-ability-select').val(turnObj.unit3.ab1);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc2-ability-select').val(turnObj.unit3.ab2);
-
-    j++;
-
-    $(".turn-" + (turn)).find(".unit-4").find("input[value='" + turnObj.unit4.action + "']").click();
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit4.ability);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit4.target);
-    if (turnObj.unit4.dc === true) {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
-    } else {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
-    }
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc1-ability-select').val(turnObj.unit4.ab1);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc2-ability-select').val(turnObj.unit4.ab2);
-
-    j++;
-
-    $(".turn-" + (turn)).find(".unit-5").find("input[value='" + turnObj.unit5.action + "']").click();
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit5.ability);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit5.target);
-    if (turnObj.unit5.dc === true) {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
-    } else {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
-    }
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc1-ability-select').val(turnObj.unit5.ab1);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc2-ability-select').val(turnObj.unit5.ab2);
-
-    j++;
-
-    $(".turn-" + (turn)).find(".unit-6").find("input[value='" + turnObj.unit6.action + "']").siblings('label').click();
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.ability-select').val(turnObj.unit6.ability);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.target-select').val(turnObj.unit6.target);
-    if (turnObj.unit6.dc === true) {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', true);
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").click();
-    } else {
-        $(".turn-" + (turn)).find('.unit-' + j + '-action').find("input[name='dualcast']").prop('checked', false);
-    }
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc1-ability-select').val(turnObj.unit6.ab1);
-    $(".turn-" + (turn)).find('.unit-' + j + '-action').find('.dc2-ability-select').val(turnObj.unit6.ab2);
 
     adv = $(".turn-" + (turn)).find(".advanced-options");
     delayForm = adv.find(".delay-unit-form");
+
+    //Remove all forms
+    adv.empty();
+
+    //Add forms back in order
+    for (var i = 0; i < 6; i++) {
+        adv.append(delayForm[turnObj.order[i] - 1]);
+    }
+    
+    //Get with new order
+    adv = $(".turn-" + (turn)).find(".advanced-options");
+    delayForm = adv.find(".delay-unit-form");
+
     delayForm.each(function (index) {
-        $(this).data("unit", turnObj.order[counter]);
         $(this).find(".delay-value").val(turnObj.delays[counter] / 1000);
         counter++;
     });
@@ -1008,8 +973,6 @@ function importMacro() {
     for (var i = 0; i < turns - 1; i++) {
         setTurnValues(data[i], i + 1);
     }
-
-    console.log(data[turns - 1]);
 
     importOptionValues(data[turns - 1]);
 
