@@ -918,7 +918,7 @@ function setTurnValues(json, turn) {
     adv.find(".delay-unit-form").remove();
 
     //Add forms back in order
-    for (var i = 0; i < 6; i++) {
+    for (var i = 6; i >= 0; i--) {
         adv.prepend(delayForm[turnObj.order[i] - 1]);
     }
     
