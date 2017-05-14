@@ -189,24 +189,36 @@ function buildMacro() {
 function getMissionString() {
     var macro = "";
     var mission;
+    var raid;
+
+    raid = $(".raid-select-box").is(":checked");
 
     mission = parseInt($("#mission-num").val());
 
     switch (mission) {
         case 1:
-            macro += time + vinput + "0:452:660\r\n";
+            if (!raid) macro += time + vinput + "0:452:660\r\n";
+            if (raid) macro += time + vinput + "0:730:660\r\n";
             break;
         case 2:
-            macro += time + vinput + "0:634:660\r\n";
+            if (!raid) macro += time + vinput + "0:634:660\r\n";
+            if (raid) macro += time + vinput + "0:930:660\r\n";
             break;
         case 3:
-            macro += time + vinput + "0:828:660\r\n";
+            if (!raid) macro += time + vinput + "0:828:660\r\n";
+            if (raid) macro += time + vinput + "0:1100:660\r\n";
             break;
         case 4:
-            macro += time + vinput + "0:1020:660\r\n";
+            if (!raid) macro += time + vinput + "0:1020:660\r\n";
+            if (raid) {
+                macro += scroll('down');
+                macro += scroll('down');
+                macro += time + vinput + "0:1120:660\r\n";
+            }
             break;
         case 5:
-            macro += time + vinput + "0:1205:660\r\n";
+            if (!raid) macro += time + vinput + "0:1205:660\r\n";
+            if (raid) ;
             break;
         case 6:
             macro += scroll('down');
@@ -371,6 +383,17 @@ function getTurnsString() {
         addTime(parseInt($(".turn-" + (i + 1)).find(".advanced-options").find(".turn-delay").val()) * 1000000);
         //Check if final turn and add finalTurnWait
         if (i === (turns - 1)) {
+            var dialog = $(".dialog-skip-box").is(":checked");
+
+            if (dialog) {
+                macro += getTime() + vinput + "0:1275:718\r\n";
+                macro += getTime() + endClick;
+                macro += getTime() + vinput + "0:1275:718\r\n";
+                macro += getTime() + endClick;
+                macro += getTime() + vinput + "0:1275:718\r\n";
+                macro += getTime() + endClick;
+                addTime(10000000);
+            }
             addTime(finalTurnWait);
         }
     }
@@ -381,6 +404,8 @@ function getTurnsString() {
 //builds and returns string to progress though mission complete screens
 function getEndSkipString() {
     var macro = "";
+    var raid = $(".raid-skip-box").is(":checked");
+
 
     //Corner clicks to skip
     macro += getTime() + vinput + "0:1275:718\r\n";
@@ -400,6 +425,19 @@ function getEndSkipString() {
 
     //wait 3 seconds
     addTime(3000000);
+
+    if (raid) {
+        macro += getTime() + vinput + "0:1275:718\r\n";
+        macro += getTime() + endClick;
+        macro += getTime() + vinput + "0:1275:718\r\n";
+        macro += getTime() + endClick;
+        macro += getTime() + vinput + "0:1275:718\r\n";
+        macro += getTime() + endClick;
+
+        macro += getTime() + vinput + "0:1120:350\r\n";
+        macro += getTime() + endClick;
+        macro += getTime() + mouse;
+    }
 
     //More Skips
     macro += getTime() + vinput + "0:1275:718\r\n";
@@ -1015,7 +1053,10 @@ function getOptionsObj() {
         finalTurnWait: 0,
         endWait: 0,
         includeStart: true,
-        includeEnd: true
+        includeEnd: true,
+        isRaid: false,
+        raidEnd: false,
+        endDialog: false
     };
 
     optionObj.mission = $("#mission-num").val();
@@ -1033,21 +1074,28 @@ function getOptionsObj() {
     optionObj.beginWait = $('.begin-wait-input').val();
     optionObj.finalTurnWait = $('.final-turn-wait-input').val();
     optionObj.endWait = $('.end-wait-input').val();
-    if ($(".include-start-box").is(':checked')) {
-        optionObj.includeStart = true;
-    } else {
-        optionObj.includeStart = false;
-    }
-    if ($(".include-end-box").is(':checked')) {
-        optionObj.includeEnd = true;
-    } else {
-        optionObj.includeEnd = false;
-    }
-    if ($(".rewards-skip-box").is(':checked')) {
-        optionObj.rewardsSkip = true;
-    } else {
-        optionObj.rewardsSkip = false;
-    }
+    // if ($(".include-start-box").is(':checked')) {
+    //     optionObj.includeStart = true;
+    // } else {
+    //     optionObj.includeStart = false;
+    // }
+    // if ($(".include-end-box").is(':checked')) {
+    //     optionObj.includeEnd = true;
+    // } else {
+    //     optionObj.includeEnd = false;
+    // }
+    // if ($(".rewards-skip-box").is(':checked')) {
+    //     optionObj.rewardsSkip = true;
+    // } else {
+    //     optionObj.rewardsSkip = false;
+    // }
+    optionObj.includeStart = $(".include-start-box").is(':checked');
+    optionObj.includeEnd = $(".include-end-box").is(':checked');
+    optionObj.rewardsSkip = $(".rewards-skip-box").is(':checked');
+    optionObj.isRaid = $(".raid-select-box").is(':checked');
+    optionObj.raidEnd = $(".raid-skip-box").is(':checked');
+    optionObj.endDialog = $(".dialog-skip-box").is(':checked');
+
 
     return JSON.stringify(optionObj);
 }
@@ -1086,6 +1134,12 @@ function importOptionValues(json) {
     if (!obj.includeEnd && $(".include-end-box").is(':checked')) $(".include-end-box").click();
     if (obj.rewardsSkip && !$(".rewards-skip-box").is(':checked')) $(".rewards-skip-box").click();
     if (!obj.rewardsSkip && $(".rewards-skip-box").is(':checked')) $(".rewards-skip-box").click();
+    if (obj.isRaid && !$(".raid-select-box").is(':checked')) $(".raid-select-box").click();
+    if (!obj.isRaid && $(".raid-select-box").is(':checked')) $(".raid-select-box").click();
+    if (obj.raidEnd && !$(".raid-skip-box").is(':checked')) $(".raid-skip-box").click();
+    if (!obj.raidEnd && $(".raid-skip-box").is(':checked')) $(".raid-skip-box").click();
+    if (obj.endDialog && !$(".dialog-skip-box").is(':checked')) $(".dialog-skip-box").click();
+    if (!obj.endDialog && $(".dialog-skip-box").is(':checked')) $(".dialog-skip-box").click();
 }
 
 //Creates unit frames 2-6

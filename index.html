@@ -27,7 +27,7 @@
                 <div class="padding-left row">
                     <div class="card-block">
                         <h4 class="card-title">Mission Select</h2>
-                            <div class="input-group col-sm-3 input-group-sm">
+                            <div class="input-group col-sm-6 input-group-sm">
                                 <select class="form-control custom-select" name="mission" id="mission-num" data-toggle="tooltip" data-placement="top" title="Will depart on mission selected, 1 being the top of the list and so on.">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -36,7 +36,14 @@
                         <option value="5">5</option>
                         <option value="6">6</option>
                     </select>
+                    <label class="raid-label custom-control custom-checkbox">
+                        <input class="custom-control-input raid-select-box" type="checkbox" name="raid-select" value="raid-select" data-toggle="tooltip" data-placement="top"
+                        title="Check if mission is raid event">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Raid</span>
+                    </label>
                             </div>
+
                     </div>
                     <div class="card-block">
                         <h4 class="card-title">Companion</h2>
@@ -397,6 +404,18 @@
                     title="">
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">Mission Has Uncompleted Rewards</span>
+                </label>
+                <label class="custom-control custom-checkbox">
+                    <input class="custom-control-input raid-skip-box" type="checkbox" name="raid-skip" value="raid-skip" data-toggle="tooltip" data-placement="top"
+                    title="Skip through additional raid mission complete screen">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Mission has raid reward screen</span>
+                </label>
+                <label class="custom-control custom-checkbox">
+                    <input class="custom-control-input dialog-skip-box" type="checkbox" name="dialog-skip" value="dialog-skip" data-toggle="tooltip" data-placement="top"
+                    title="Mission has ending dialog">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Mission has ending dialog</span>
                 </label>
                 <label class="custom-control custom-checkbox">
                     <input class="custom-control-input include-start-box" type="checkbox" name="include-start" value="include-start" checked>
